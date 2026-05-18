@@ -14,17 +14,36 @@ const Contact = () => {
     name: '',
     phone: '',
     ward: '',
-    areaOfInterest: '',
   });
 
-  const interestAreas = [
-    'Youth Mobilisation',
-    'Women\'s Wing',
-    'Campaign Management',
-    'Social Media',
-    'Logistics',
-    'Other',
-  ];
+  const wardsByLga = {
+    Hong: [
+      'Bangshika',
+      'Daksiri',
+      'Garaha',
+      'Gaya',
+      'Hildi',
+      'Hong',
+      'Hushere Zum',
+      'Kwarhi',
+      'Mayo Lope',
+      'Shangui',
+      'Thilbang',
+      'Uba',
+    ],
+    Gombi: [
+      'Boga/Dingai',
+      'Duwa',
+      'Ga\'anda',
+      'Gabun',
+      'Garkida',
+      'Gombi North',
+      'Gombi South',
+      'Guyaku',
+      'Tawa',
+      'Yang',
+    ],
+  };
 
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,7 +58,7 @@ const Contact = () => {
     // Handle volunteer registration
     console.log('Volunteer form submitted:', volunteerForm);
     alert('Thank you for volunteering! Our team will contact you to get started.');
-    setVolunteerForm({ name: '', phone: '', ward: '', areaOfInterest: '' });
+    setVolunteerForm({ name: '', phone: '', ward: '' });
   };
 
   return (
@@ -179,35 +198,27 @@ const Contact = () => {
                     />
                   </div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div className="mb-4">
                   <div>
                     <label htmlFor="volunteer-ward" className="block text-sm font-medium text-navy mb-2">
                       Ward *
                     </label>
-                    <input
-                      type="text"
+                    <select
                       id="volunteer-ward"
                       required
                       value={volunteerForm.ward}
                       onChange={(e) => setVolunteerForm({ ...volunteerForm, ward: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-apc-green"
-                      placeholder="Your ward"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="volunteer-interest" className="block text-sm font-medium text-navy mb-2">
-                      Area of Interest *
-                    </label>
-                    <select
-                      id="volunteer-interest"
-                      required
-                      value={volunteerForm.areaOfInterest}
-                      onChange={(e) => setVolunteerForm({ ...volunteerForm, areaOfInterest: e.target.value })}
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lp-red bg-white"
                     >
-                      <option value="">Select an area</option>
-                      {interestAreas.map((area) => (
-                        <option key={area} value={area}>{area}</option>
+                      <option value="">Select your ward</option>
+                      {Object.entries(wardsByLga).map(([lga, wards]) => (
+                        <optgroup key={lga} label={lga}>
+                          {wards.map((ward) => (
+                            <option key={`${lga}-${ward}`} value={`${ward} (${lga})`}>
+                              {ward}
+                            </option>
+                          ))}
+                        </optgroup>
                       ))}
                     </select>
                   </div>

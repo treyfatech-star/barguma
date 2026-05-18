@@ -76,6 +76,12 @@ const Home = () => {
                 Our Agenda
               </Link>
               <Link
+                to="/gallery"
+                className="bg-white/10 backdrop-blur text-white border border-white/30 px-6 py-3 rounded-md font-semibold hover:bg-white/20 transition-colors"
+              >
+                Our Project
+              </Link>
+              <Link
                 to="/contact"
                 className="bg-lp-red text-white px-6 py-3 rounded-md font-semibold hover:bg-opacity-90 transition-colors"
               >

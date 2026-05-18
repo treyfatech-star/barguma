@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { MapPin, GraduationCap, Car, Briefcase, FileText, Building2, Heart, Wrench, Users } from 'lucide-react';
 
 const TrackRecord = () => {
-  const [activeTab, setActiveTab] = useState('infrastructure');
+  const [activeTab, setActiveTab] = useState('legislative');
 
   const tabs = [
+    { id: 'legislative', label: 'Bills & Motions' },
     { id: 'infrastructure', label: 'Infrastructure Projects' },
     { id: 'facilitated', label: 'Facilitated Projects' },
     { id: 'empowerment', label: 'Empowerment & Employment' },
-    { id: 'legislative', label: 'Legislative Record' },
   ];
 
   const infrastructureProjects = [
@@ -91,31 +91,43 @@ const TrackRecord = () => {
     },
   ];
 
-  const billsSponsored = [
+  const legislativeBills = [
     {
-      title: 'Adamawa State Rehabilitation and Reconstruction Agency Bill',
-      description: 'A Bill for a Law to Establish the Adamawa State Rehabilitation and Reconstruction Agency, to rehabilitate victims of insurgency and reconstruct the seven affected LGAs of the state.',
+      title: 'Agency for Rehabilitation, Reconstruction and Reintegration (RRR) Bill',
+      outcome: 'Passed into law and now operational as the Ministry of RRR.',
     },
     {
-      title: 'Office of Accountant General Bill',
-      description: 'A Bill for a Law to Establish the Office of Accountant General, its functions, powers and structure.',
+      title: 'Board of Internal Revenue Repeal Bill',
+      outcome: 'Led to major reforms in the state revenue service.',
     },
     {
-      title: 'Office of Auditor General Bill',
-      description: 'A Bill for a Law to Establish the Office of Auditor General, its functions, powers and structure.',
+      title: 'Accountant General\'s Office Repeal Bill',
+      outcome: 'Enhanced accountability and transparency in financial administration.',
+    },
+    {
+      title: 'Administrative Staff Conditions of Service Bill',
+      outcome: 'Improved welfare for Adamawa State civil staff.',
+    },
+    {
+      title: 'House of Assembly Staff Retirement and Welfare Bill',
+      outcome: 'Secured special retirement and service welfare benefits.',
+    },
+    {
+      title: '2019 Fiscal Year Executive Bills',
+      outcome: 'Contributed to improved economic outcomes for the state.',
     },
   ];
 
-  const motionsMoved = [
-    { category: 'Agriculture', count: 2 },
-    { category: 'Security', count: 1 },
-    { category: 'Fiscal Oversight', count: 1 },
-    { category: 'IDP Response', count: 1 },
-    { category: 'Infrastructure', count: 2 },
-    { category: 'Accountability', count: 1 },
+  const legislativeMotions = [
+    {
+      title: 'Motion to Investigate the Deputy Governor on IDP Affairs',
+      outcome: 'Resulted in the Deputy Governor appearing before the House to account for the management of Internally Displaced Persons.',
+    },
+    {
+      title: 'Motion to Investigate the Commissioner for Local Government Affairs',
+      outcome: 'Addressed unpaid salaries and remuneration of LGA staff, compelling the Commissioner\'s appearance before the House.',
+    },
   ];
-
-  const [openAccordion, setOpenAccordion] = useState<string | null>(null);
 
   return (
     <div className="min-h-screen">
@@ -250,52 +262,73 @@ const TrackRecord = () => {
           {/* Legislative Record Tab */}
           {activeTab === 'legislative' && (
             <div>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-5xl mx-auto">
-                {/* Bills Sponsored */}
-                <div>
-                  <h2 className="font-playfair text-2xl font-bold text-navy mb-6">
-                    Bills Sponsored (3 Bills)
-                  </h2>
-                  <div className="space-y-4">
-                    {billsSponsored.map((bill, index) => (
-                      <div
-                        key={index}
-                        className="bg-white rounded-lg shadow-sm overflow-hidden"
-                      >
-                        <button
-                          onClick={() => setOpenAccordion(openAccordion === `bill-${index}` ? null : `bill-${index}`)}
-                          className="w-full p-6 text-left flex items-center justify-between"
-                        >
-                          <span className="font-semibold text-navy">{bill.title}</span>
-                          <FileText className="text-lp-red" size={20} />
-                        </button>
-                        {openAccordion === `bill-${index}` && (
-                          <div className="px-6 pb-6">
-                            <p className="text-navy/70">{bill.description}</p>
-                          </div>
-                        )}
-                      </div>
-                    ))}
+              <div className="max-w-6xl mx-auto space-y-10">
+                <div className="bg-white rounded-2xl shadow-sm p-8">
+                  <div className="inline-flex items-center rounded-full bg-lp-red/10 px-4 py-2 text-sm font-semibold text-lp-red mb-4">
+                    6th Assembly Legislative Record
                   </div>
+                  <h2 className="font-playfair text-3xl font-bold text-navy mb-4">
+                    Hon. Hassan Barguma&apos;s Record on Bills, Motions, and Referrals
+                  </h2>
+                  <p className="text-navy/80 leading-relaxed mb-4">
+                    Bills, motions, and referrals are the core tools of legislative service. Lawmaking remains the primary duty of any legislator, while motions bring urgent public concerns before the House for immediate attention. After debate at the Committee of the Whole, matters are often referred to standing committees for deeper legislative work.
+                  </p>
+                  <p className="text-navy/80 leading-relaxed">
+                    In the 6th Assembly, Hon. Hassan Barguma used these instruments to drive policy reform, strengthen oversight, and respond to the needs and yearnings of the people.
+                  </p>
                 </div>
 
-                {/* Motions Moved */}
-                <div>
-                  <h2 className="font-playfair text-2xl font-bold text-navy mb-6">
-                    Motions Moved (6 Thematic Areas)
-                  </h2>
-                  <div className="space-y-4">
-                    {motionsMoved.map((motion, index) => (
-                      <div
-                        key={index}
-                        className="bg-white p-6 rounded-lg shadow-sm flex items-center justify-between"
-                      >
-                        <span className="font-semibold text-navy">{motion.category}</span>
-                        <span className="bg-lp-red text-white text-sm px-3 py-1 rounded-full">
-                          {motion.count} {motion.count === 1 ? 'motion' : 'motions'}
-                        </span>
-                      </div>
-                    ))}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  <div>
+                    <h3 className="font-playfair text-2xl font-bold text-navy mb-6">
+                      Bills
+                    </h3>
+                    <div className="space-y-4">
+                      {legislativeBills.map((bill, index) => (
+                        <div key={bill.title} className="bg-white rounded-xl shadow-sm p-6">
+                          <div className="flex items-start gap-4">
+                            <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-lp-red text-white font-bold">
+                              {index + 1}
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2 mb-2">
+                                <FileText className="text-lp-red" size={18} />
+                                <h4 className="font-semibold text-navy text-lg">{bill.title}</h4>
+                              </div>
+                              <p className="text-navy/75 leading-relaxed">{bill.outcome}</p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="font-playfair text-2xl font-bold text-navy mb-6">
+                      Motions
+                    </h3>
+                    <div className="space-y-4">
+                      {legislativeMotions.map((motion, index) => (
+                        <div key={motion.title} className="bg-white rounded-xl shadow-sm p-6">
+                          <div className="flex items-start gap-4">
+                            <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gold text-navy font-bold">
+                              {index + 1}
+                            </div>
+                            <div>
+                              <h4 className="font-semibold text-navy text-lg mb-2">{motion.title}</h4>
+                              <p className="text-navy/75 leading-relaxed">{motion.outcome}</p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="mt-6 rounded-xl border border-gold/40 bg-gold/10 p-6">
+                      <h4 className="font-semibold text-navy mb-2">Legislative Impact</h4>
+                      <p className="text-navy/80 leading-relaxed">
+                        These actions reflect direct legislative intervention in policy, public accountability, and oversight, showing a record that combines lawmaking with practical action on urgent public issues.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
