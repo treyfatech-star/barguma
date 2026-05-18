@@ -55,3 +55,16 @@ export default tseslint.config({
   },
 })
 ```
+
+## Join The Movement Email Setup
+
+The volunteer form can save responses to Google Sheets and email an Excel copy to `mbarguma@outlook.com`.
+
+1. Create a new Google Sheet.
+2. Open `Extensions > Apps Script`.
+3. Paste the code from `google-apps-script/join-movement.gs`.
+4. Deploy the script as a `Web app` with access set to `Anyone`.
+5. Copy the deployment URL.
+6. Create a local `.env` file from `.env.example`.
+7. Set `VITE_JOIN_MOVEMENT_WEBHOOK_URL` to the Google Apps Script deployment URL.
+8. Restart the Vite dev server after changing the env file.

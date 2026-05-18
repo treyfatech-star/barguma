@@ -15,6 +15,8 @@ const Contact = () => {
     phone: '',
     ward: '',
   });
+  const [isSubmittingVolunteer, setIsSubmittingVolunteer] = useState(false);
+  const joinMovementWebhookUrl = import.meta.env.VITE_JOIN_MOVEMENT_WEBHOOK_URL;
 
   const wardsByLga = {
     Hong: [
@@ -53,12 +55,38 @@ const Contact = () => {
     setContactForm({ name: '', phone: '', email: '', ward: '', message: '' });
   };
 
-  const handleVolunteerSubmit = (e: React.FormEvent) => {
+  const handleVolunteerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle volunteer registration
-    console.log('Volunteer form submitted:', volunteerForm);
-    alert('Thank you for volunteering! Our team will contact you to get started.');
-    setVolunteerForm({ name: '', phone: '', ward: '' });
+
+    if (!joinMovementWebhookUrl) {
+      alert('Join the Movement email integration is not configured yet. Add VITE_JOIN_MOVEMENT_WEBHOOK_URL to enable Google Sheets and email delivery.');
+      return;
+    }
+
+    setIsSubmittingVolunteer(true);
+
+    try {
+      await fetch(joinMovementWebhookUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8',
+        },
+        body: JSON.stringify({
+          formType: 'join-movement',
+          submittedAt: new Date().toISOString(),
+          ...volunteerForm,
+        }),
+      });
+
+      alert('Thank you for volunteering! Your response has been recorded and sent to the campaign team.');
+      setVolunteerForm({ name: '', phone: '', ward: '' });
+    } catch (error) {
+      console.error('Volunteer form submission failed:', error);
+      alert('We could not submit your response right now. Please try again.');
+    } finally {
+      setIsSubmittingVolunteer(false);
+    }
   };
 
   return (
@@ -225,10 +253,14 @@ const Contact = () => {
                 </div>
                 <button
                   type="submit"
+                  disabled={isSubmittingVolunteer}
                   className="w-full bg-gold text-navy py-3 rounded-md font-semibold hover:bg-opacity-90 transition-colors mt-2"
                 >
-                  Register as Volunteer
+                  {isSubmittingVolunteer ? 'Submitting...' : 'Register as Volunteer'}
                 </button>
+                <p className="mt-3 text-sm text-navy/60">
+                  Once configured, responses are saved to Google Sheets and emailed to `mbarguma@outlook.com`.
+                </p>
               </form>
 
               {/* Campaign Office Info */}
