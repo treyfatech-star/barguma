@@ -1,4 +1,4 @@
-import { Facebook, Twitter, MessageCircle, Calendar, User } from 'lucide-react';
+import { Calendar, User } from 'lucide-react';
 
 const News = () => {
   const newsArticles = [
@@ -115,34 +115,6 @@ const News = () => {
 
             {/* Sidebar */}
             <div className="lg:col-span-1">
-              {/* Social Media Feed */}
-              <div className="bg-white p-6 rounded-lg shadow-sm mb-8">
-                <h3 className="font-playfair text-xl font-bold text-navy mb-6">Follow Our Socials</h3>
-                <div className="space-y-4">
-                  <a
-                    href="#"
-                    className="flex items-center p-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                  >
-                    <Facebook className="mr-3" size={20} />
-                    <span>Facebook Page</span>
-                  </a>
-                  <a
-                    href="#"
-                    className="flex items-center p-4 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors"
-                  >
-                    <Twitter className="mr-3" size={20} />
-                    <span>X (Twitter)</span>
-                  </a>
-                  <a
-                    href="#"
-                    className="flex items-center p-4 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
-                  >
-                    <MessageCircle className="mr-3" size={20} />
-                    <span>WhatsApp Channel</span>
-                  </a>
-                </div>
-              </div>
-
               {/* Upcoming Events */}
               <div className="bg-white p-6 rounded-lg shadow-sm">
                 <h3 className="font-playfair text-xl font-bold text-navy mb-6">Upcoming Events</h3>

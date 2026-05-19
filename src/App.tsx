@@ -8,7 +8,6 @@ import News from "@/pages/News";
 import Contact from "@/pages/Contact";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import WhatsAppButton from "@/components/WhatsAppButton";
 
 export default function App() {
   return (
@@ -27,7 +26,6 @@ export default function App() {
           </Routes>
         </main>
         <Footer />
-        <WhatsAppButton />
       </div>
     </Router>
   );

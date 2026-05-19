@@ -1,14 +1,87 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, BookOpen, Heart, Map, Droplets, Users } from 'lucide-react';
 import { useInView, useCounter } from '@/hooks/useInView';
 
 const Home = () => {
   const { ref: statsRef, isInView: statsInView } = useInView(0.3);
+  const [supporterForm, setSupporterForm] = useState({
+    name: '',
+    phone: '',
+    ward: '',
+    email: '',
+  });
+  const [isSubmittingSupporter, setIsSubmittingSupporter] = useState(false);
+  const [supporterSuccessMessage, setSupporterSuccessMessage] = useState('');
+  const joinMovementWebhookUrl = import.meta.env.VITE_JOIN_MOVEMENT_WEBHOOK_URL;
   
   const boreholes = useCounter(36, 2000, statsInView);
   const scholarships = useCounter(170, 2000, statsInView);
   const jobs = useCounter(152, 2000, statsInView);
   const projects = useCounter(23, 2000, statsInView);
+
+  const wardsByLga = {
+    Hong: [
+      'Bangshika',
+      'Daksiri',
+      'Garaha',
+      'Gaya',
+      'Hildi',
+      'Hong',
+      'Hushere Zum',
+      'Kwarhi',
+      'Mayo Lope',
+      'Shangui',
+      'Thilbang',
+      'Uba',
+    ],
+    Gombi: [
+      'Boga/Dingai',
+      'Duwa',
+      "Ga'anda",
+      'Gabun',
+      'Garkida',
+      'Gombi North',
+      'Gombi South',
+      'Guyaku',
+      'Tawa',
+      'Yang',
+    ],
+  };
+
+  const handleSupporterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!joinMovementWebhookUrl) {
+      alert('Supporter registration is not configured yet. Add VITE_JOIN_MOVEMENT_WEBHOOK_URL to enable submissions.');
+      return;
+    }
+
+    setIsSubmittingSupporter(true);
+
+    try {
+      await fetch(joinMovementWebhookUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8',
+        },
+        body: JSON.stringify({
+          formType: 'supporter-registration',
+          submittedAt: new Date().toISOString(),
+          ...supporterForm,
+        }),
+      });
+
+      setSupporterSuccessMessage('Thank you for registering as a supporter! Your response has been submitted successfully.');
+      setSupporterForm({ name: '', phone: '', ward: '', email: '' });
+    } catch (error) {
+      console.error('Supporter registration failed:', error);
+      alert('We could not submit your registration right now. Please try again.');
+    } finally {
+      setIsSubmittingSupporter(false);
+    }
+  };
 
   const featuredProjects = [
     {
@@ -68,6 +141,12 @@ const Home = () => {
                 className="bg-gold text-navy px-6 py-3 rounded-md font-semibold hover:bg-opacity-90 transition-colors"
               >
                 Meet Hon. Barguma
+              </Link>
+              <Link
+                to="/track-record"
+                className="bg-white/10 backdrop-blur text-white border border-white/30 px-6 py-3 rounded-md font-semibold hover:bg-white/20 transition-colors"
+              >
+                Track Record
               </Link>
               <Link
                 to="/vision-agenda"
@@ -352,7 +431,12 @@ const Home = () => {
                 Register as a supporter and stay updated on the campaign's progress
               </p>
             </div>
-            <form className="bg-white p-8 rounded-lg shadow-lg">
+            <form onSubmit={handleSupporterSubmit} className="bg-white p-8 rounded-lg shadow-lg">
+              {supporterSuccessMessage && (
+                <div className="mb-4 rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+                  {supporterSuccessMessage}
+                </div>
+              )}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-navy mb-2">Full Name *</label>
@@ -360,47 +444,65 @@ const Home = () => {
                     type="text"
                     id="name"
                     required
+                    value={supporterForm.name}
+                    onChange={(e) => setSupporterForm({ ...supporterForm, name: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lp-red"
-                      placeholder="Your full name"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="phone" className="block text-sm font-medium text-navy mb-2">Phone Number *</label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      required
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lp-red"
-                      placeholder="Your phone number"
-                    />
-                  </div>
+                    placeholder="Your full name"
+                  />
                 </div>
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium text-navy mb-2">Phone Number *</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    required
+                    value={supporterForm.phone}
+                    onChange={(e) => setSupporterForm({ ...supporterForm, phone: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lp-red"
+                    placeholder="Your phone number"
+                  />
+                </div>
+              </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                   <div>
                     <label htmlFor="ward" className="block text-sm font-medium text-navy mb-2">Ward *</label>
-                    <input
-                      type="text"
+                    <select
                       id="ward"
                       required
+                      value={supporterForm.ward}
+                      onChange={(e) => setSupporterForm({ ...supporterForm, ward: e.target.value })}
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lp-red"
-                      placeholder="Your ward"
-                    />
+                    >
+                      <option value="">Select your ward</option>
+                      {Object.entries(wardsByLga).map(([lga, wards]) => (
+                        <optgroup key={`supporter-${lga}`} label={lga}>
+                          {wards.map((ward) => (
+                            <option key={`supporter-${lga}-${ward}`} value={`${ward} (${lga})`}>
+                              {ward}
+                            </option>
+                          ))}
+                        </optgroup>
+                      ))}
+                    </select>
                   </div>
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium text-navy mb-2">Email (Optional)</label>
                     <input
                       type="email"
                       id="email"
+                      value={supporterForm.email}
+                      onChange={(e) => setSupporterForm({ ...supporterForm, email: e.target.value })}
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lp-red"
                       placeholder="your@email.com"
                     />
-                </div>
+                  </div>
               </div>
               <button
                 type="submit"
+                disabled={isSubmittingSupporter}
                 className="w-full bg-gold text-navy py-3 rounded-md font-semibold hover:bg-opacity-90 transition-colors"
               >
-                Register as a Supporter
+                {isSubmittingSupporter ? 'Submitting...' : 'Register as a Supporter'}
               </button>
             </form>
           </div>

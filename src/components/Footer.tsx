@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Instagram, MessageCircle } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -12,13 +11,6 @@ const Footer = () => {
     { name: 'Projects', path: '/gallery' },
     { name: 'News', path: '/news' },
     { name: 'Contact', path: '/contact' },
-  ];
-
-  const socialLinks = [
-    { name: 'Facebook', icon: Facebook, url: '#' },
-    { name: 'Twitter', icon: Twitter, url: '#' },
-    { name: 'Instagram', icon: Instagram, url: '#' },
-    { name: 'WhatsApp', icon: MessageCircle, url: '#' },
   ];
 
   return (
@@ -58,27 +50,15 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact & Social */}
+          {/* Contact */}
           <div>
-            <h4 className="font-playfair text-lg font-semibold mb-4 text-white">Connect With Us</h4>
+            <h4 className="font-playfair text-lg font-semibold mb-4 text-white">Campaign Office</h4>
             <p className="text-gray-300 text-sm mb-4">
               Campaign Office: Hong, Adamawa State, Nigeria
             </p>
-            <div className="flex space-x-4">
-              {socialLinks.map((social) => {
-                const Icon = social.icon;
-                return (
-                  <a
-                    key={social.name}
-                    href={social.url}
-                    className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-lp-red transition-colors"
-                    aria-label={social.name}
-                  >
-                    <Icon size={18} />
-                  </a>
-                );
-              })}
-            </div>
+            <p className="text-gray-300 text-sm">
+              Contact the campaign through the official office channels listed on the contact page.
+            </p>
           </div>
         </div>
 

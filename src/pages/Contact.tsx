@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, MessageCircle } from 'lucide-react';
+import { MapPin, Phone, Mail } from 'lucide-react';
 
 const Contact = () => {
   const [contactForm, setContactForm] = useState({
@@ -15,6 +15,8 @@ const Contact = () => {
     phone: '',
     ward: '',
   });
+  const [contactSuccessMessage, setContactSuccessMessage] = useState('');
+  const [volunteerSuccessMessage, setVolunteerSuccessMessage] = useState('');
   const [isSubmittingVolunteer, setIsSubmittingVolunteer] = useState(false);
   const joinMovementWebhookUrl = import.meta.env.VITE_JOIN_MOVEMENT_WEBHOOK_URL;
 
@@ -51,7 +53,7 @@ const Contact = () => {
     e.preventDefault();
     // Handle form submission - would integrate with backend
     console.log('Contact form submitted:', contactForm);
-    alert('Thank you for your message! Our campaign team will get back to you soon.');
+    setContactSuccessMessage('Thank you for your message! Our campaign team will get back to you soon.');
     setContactForm({ name: '', phone: '', email: '', ward: '', message: '' });
   };
 
@@ -59,7 +61,7 @@ const Contact = () => {
     e.preventDefault();
 
     if (!joinMovementWebhookUrl) {
-      alert('Join the Movement email integration is not configured yet. Add VITE_JOIN_MOVEMENT_WEBHOOK_URL to enable Google Sheets and email delivery.');
+      alert('Supporter registration email integration is not configured yet. Add VITE_JOIN_MOVEMENT_WEBHOOK_URL to enable Google Sheets and email delivery.');
       return;
     }
 
@@ -79,7 +81,7 @@ const Contact = () => {
         }),
       });
 
-      alert('Thank you for volunteering! Your response has been recorded and sent to the campaign team.');
+      setVolunteerSuccessMessage('Thank you for registering as a supporter! Your response has been recorded and sent to the campaign team.');
       setVolunteerForm({ name: '', phone: '', ward: '' });
     } catch (error) {
       console.error('Volunteer form submission failed:', error);
@@ -98,7 +100,7 @@ const Contact = () => {
             Contact & Get Involved
           </h1>
           <p className="text-white/80 text-center mt-4 max-w-2xl mx-auto">
-            Reach out to our campaign team, send us a message, or sign up to volunteer in your community
+            Reach out to our campaign team, send us a message, or register as a supporter in your community
           </p>
         </div>
       </section>
@@ -109,6 +111,11 @@ const Contact = () => {
             {/* Contact Form */}
             <div className="bg-white p-8 rounded-lg shadow-sm">
               <h2 className="font-playfair text-2xl font-bold text-navy mb-6">Send Us a Message</h2>
+              {contactSuccessMessage && (
+                <div className="mb-4 rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+                  {contactSuccessMessage}
+                </div>
+              )}
               <form onSubmit={handleContactSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
@@ -158,15 +165,24 @@ const Contact = () => {
                     <label htmlFor="contact-ward" className="block text-sm font-medium text-navy mb-2">
                       Ward *
                     </label>
-                    <input
-                      type="text"
+                    <select
                       id="contact-ward"
                       required
                       value={contactForm.ward}
                       onChange={(e) => setContactForm({ ...contactForm, ward: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-apc-green"
-                      placeholder="Your ward"
-                    />
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lp-red bg-white"
+                    >
+                      <option value="">Select your ward</option>
+                      {Object.entries(wardsByLga).map(([lga, wards]) => (
+                        <optgroup key={`contact-${lga}`} label={lga}>
+                          {wards.map((ward) => (
+                            <option key={`contact-${lga}-${ward}`} value={`${ward} (${lga})`}>
+                              {ward}
+                            </option>
+                          ))}
+                        </optgroup>
+                      ))}
+                    </select>
                   </div>
                 </div>
                 <div className="mb-6">
@@ -192,9 +208,14 @@ const Contact = () => {
               </form>
             </div>
 
-            {/* Volunteer Sign-Up */}
+            {/* Supporter Sign-Up */}
             <div className="bg-white p-8 rounded-lg shadow-sm">
-              <h2 className="font-playfair text-2xl font-bold text-navy mb-6">Volunteer to Join the Movement</h2>
+              <h2 className="font-playfair text-2xl font-bold text-navy mb-6">Register as a Supporter</h2>
+              {volunteerSuccessMessage && (
+                <div className="mb-4 rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+                  {volunteerSuccessMessage}
+                </div>
+              )}
               <form onSubmit={handleVolunteerSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
@@ -256,7 +277,7 @@ const Contact = () => {
                   disabled={isSubmittingVolunteer}
                   className="w-full bg-gold text-navy py-3 rounded-md font-semibold hover:bg-opacity-90 transition-colors mt-2"
                 >
-                  {isSubmittingVolunteer ? 'Submitting...' : 'Register as Volunteer'}
+                  {isSubmittingVolunteer ? 'Submitting...' : 'Register as a Supporter'}
                 </button>
                 <p className="mt-3 text-sm text-navy/60">
                   Once configured, responses are saved to Google Sheets and emailed to `mbarguma@outlook.com`.
@@ -284,24 +305,6 @@ const Contact = () => {
                 </div>
               </div>
 
-              {/* Social Media Links */}
-              <div className="mt-8 pt-8 border-t border-gray-200">
-                <h3 className="font-playfair text-xl font-bold text-navy mb-4">Connect With Us</h3>
-                <div className="flex space-x-3">
-                  <a href="#" className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-lp-red transition-colors">
-                    <Facebook size={18} />
-                  </a>
-                  <a href="#" className="w-10 h-10 bg-sky-500 rounded-full flex items-center justify-center text-white hover:bg-lp-red transition-colors">
-                    <Twitter size={18} />
-                  </a>
-                  <a href="#" className="w-10 h-10 bg-pink-600 rounded-full flex items-center justify-center text-white hover:bg-lp-red transition-colors">
-                    <Instagram size={18} />
-                  </a>
-                  <a href="#" className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white hover:bg-lp-red transition-colors">
-                    <MessageCircle size={18} />
-                  </a>
-                </div>
-              </div>
             </div>
           </div>
         </div>
