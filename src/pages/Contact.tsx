@@ -2,21 +2,12 @@ import { useState } from 'react';
 import { MapPin, Phone, Mail } from 'lucide-react';
 
 const Contact = () => {
-  const [contactForm, setContactForm] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    ward: '',
-    message: '',
-  });
-
   const [volunteerForm, setVolunteerForm] = useState({
     name: '',
     phone: '',
     ward: '',
     email: '',
   });
-  const [contactSuccessMessage, setContactSuccessMessage] = useState('');
   const [volunteerSuccessMessage, setVolunteerSuccessMessage] = useState('');
   const [isSubmittingVolunteer, setIsSubmittingVolunteer] = useState(false);
   const joinMovementWebhookUrl = import.meta.env.VITE_JOIN_MOVEMENT_WEBHOOK_URL;
@@ -48,14 +39,6 @@ const Contact = () => {
       'Tawa',
       'Yang',
     ],
-  };
-
-  const handleContactSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission - would integrate with backend
-    console.log('Contact form submitted:', contactForm);
-    setContactSuccessMessage('Thank you for your message! Our campaign team will get back to you soon.');
-    setContactForm({ name: '', phone: '', email: '', ward: '', message: '' });
   };
 
   const handleVolunteerSubmit = async (e: React.FormEvent) => {
@@ -101,114 +84,14 @@ const Contact = () => {
             Contact & Get Involved
           </h1>
           <p className="text-white/80 text-center mt-4 max-w-2xl mx-auto">
-            Reach out to our campaign team, send us a message, or register as a supporter in your community
+            Reach out to our campaign team or register as a supporter in your community
           </p>
         </div>
       </section>
 
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Contact Form */}
-            <div className="bg-white p-8 rounded-lg shadow-sm">
-              <h2 className="font-playfair text-2xl font-bold text-navy mb-6">Send Us a Message</h2>
-              {contactSuccessMessage && (
-                <div className="mb-4 rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
-                  {contactSuccessMessage}
-                </div>
-              )}
-              <form onSubmit={handleContactSubmit}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  <div>
-                    <label htmlFor="contact-name" className="block text-sm font-medium text-navy mb-2">
-                      Full Name *
-                    </label>
-                    <input
-                      type="text"
-                      id="contact-name"
-                      required
-                      value={contactForm.name}
-                      onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lp-red"
-                      placeholder="Your full name"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="contact-phone" className="block text-sm font-medium text-navy mb-2">
-                      Phone Number *
-                    </label>
-                    <input
-                      type="tel"
-                      id="contact-phone"
-                      required
-                      value={contactForm.phone}
-                      onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-apc-green"
-                      placeholder="Your phone number"
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  <div>
-                    <label htmlFor="contact-email" className="block text-sm font-medium text-navy mb-2">
-                      Email (Optional)
-                    </label>
-                    <input
-                      type="email"
-                      id="contact-email"
-                      value={contactForm.email}
-                      onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-apc-green"
-                      placeholder="your@email.com"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="contact-ward" className="block text-sm font-medium text-navy mb-2">
-                      Ward *
-                    </label>
-                    <select
-                      id="contact-ward"
-                      required
-                      value={contactForm.ward}
-                      onChange={(e) => setContactForm({ ...contactForm, ward: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lp-red bg-white"
-                    >
-                      <option value="">Select your ward</option>
-                      {Object.entries(wardsByLga).map(([lga, wards]) => (
-                        <optgroup key={`contact-${lga}`} label={lga}>
-                          {wards.map((ward) => (
-                            <option key={`contact-${lga}-${ward}`} value={`${ward} (${lga})`}>
-                              {ward}
-                            </option>
-                          ))}
-                        </optgroup>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                <div className="mb-6">
-                  <label htmlFor="contact-message" className="block text-sm font-medium text-navy mb-2">
-                    Message *
-                  </label>
-                  <textarea
-                    id="contact-message"
-                    required
-                    rows={5}
-                    value={contactForm.message}
-                    onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-apc-green"
-                    placeholder="Your message..."
-                  ></textarea>
-                </div>
-                <button
-                  type="submit"
-                  className="w-full bg-lp-red text-white py-3 rounded-md font-semibold hover:bg-opacity-90 transition-colors"
-                >
-                  Send Message
-                </button>
-              </form>
-            </div>
-
+          <div className="grid grid-cols-1 lg:grid-cols-1 gap-12">
             {/* Supporter Sign-Up */}
             <div className="bg-white p-8 rounded-lg shadow-sm">
               <h2 className="font-playfair text-2xl font-bold text-navy mb-6">Register as a Supporter</h2>
