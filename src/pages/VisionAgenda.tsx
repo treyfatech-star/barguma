@@ -75,6 +75,15 @@ const VisionAgenda = () => {
                 <Download size={20} className="mr-2" />
                 Download Full Manifesto (PDF)
               </a>
+              
+             <a href="/manifesto.pdf"
+  download="Full_Manifesto.pdf"
+  className="bg-gold text-navy px-8 py-3 rounded-md font-semibold hover:bg-opacity-90 transition-colors inline-flex items-center"
+> 
+  <Download size={20} className="mr-2" />
+  Download Full Manifesto (PDF)
+</a>
+              <p className="text-sm text-navy/60 mt-2"></p>
             </div>
           </div>
         </div>
