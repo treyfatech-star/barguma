@@ -66,8 +66,8 @@ const VisionAgenda = () => {
             </p>
             <div className="inline-block">
               <a
-                href="/HON.%20HASSAN_BARGUMA%20MANIFESTO.pdf"
-                download="HON. HASSAN_BARGUMA MANIFESTO.pdf"
+                href="/Hassan%20Barguma%20Manifesto.pdf"
+                download="Hassan Barguma Manifesto.pdf"
                 className="bg-gold text-navy px-8 py-3 rounded-md font-semibold hover:bg-opacity-90 transition-colors inline-flex items-center"
               >
                 <Download size={20} className="mr-2" />
