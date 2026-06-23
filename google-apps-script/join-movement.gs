@@ -8,16 +8,25 @@ function doPost(e) {
 
     const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
     const sheet = getOrCreateSheet_(spreadsheet);
+    const submittedAt = new Date(payload.submittedAt || new Date().toISOString());
 
-    sheet.appendRow([
-      new Date(payload.submittedAt || new Date().toISOString()),
+    const row = [
+      submittedAt,
       payload.name,
       payload.phone,
       payload.ward,
+      payload.email || '',
       payload.formType || 'join-movement',
-    ]);
+      '',
+      '',
+    ];
 
-    sendNotificationEmail_(spreadsheet, payload);
+    sheet.appendRow(row);
+    const rowNumber = sheet.getLastRow();
+    const emailResult = sendNotificationEmail_(spreadsheet, payload, submittedAt);
+
+    sheet.getRange(rowNumber, 7).setValue(emailResult.status);
+    sheet.getRange(rowNumber, 8).setValue(emailResult.message);
 
     return ContentService
       .createTextOutput(JSON.stringify({ ok: true }))
@@ -37,7 +46,16 @@ function getOrCreateSheet_(spreadsheet) {
   }
 
   if (sheet.getLastRow() === 0) {
-    sheet.appendRow(['Submitted At', 'Full Name', 'Phone Number', 'Ward', 'Form Type']);
+    sheet.appendRow([
+      'Submitted At',
+      'Full Name',
+      'Phone Number',
+      'Ward',
+      'Email',
+      'Form Type',
+      'Email Status',
+      'Notes',
+    ]);
   }
 
   return sheet;
@@ -49,26 +67,41 @@ function validatePayload_(payload) {
   }
 }
 
-function sendNotificationEmail_(spreadsheet, payload) {
-  const attachment = exportSpreadsheetAsXlsx_(spreadsheet.getId(), spreadsheet.getName());
+function sendNotificationEmail_(spreadsheet, payload, submittedAt) {
   const subject = 'New Join the Movement response';
-  const body = [
+  const lines = [
     'A new Join the Movement response has been received.',
     '',
     'Name: ' + payload.name,
     'Phone: ' + payload.phone,
     'Ward: ' + payload.ward,
-    'Submitted At: ' + (payload.submittedAt || new Date().toISOString()),
+    'Email: ' + (payload.email || 'Not provided'),
+    'Form Type: ' + (payload.formType || 'join-movement'),
+    'Submitted At: ' + submittedAt.toISOString(),
     '',
-    'The latest spreadsheet is attached in Excel format.',
-  ].join('\n');
+    'Spreadsheet: ' + spreadsheet.getUrl(),
+  ];
 
-  MailApp.sendEmail({
-    to: EMAIL_TO,
-    subject: subject,
-    body: body,
-    attachments: [attachment],
-  });
+  try {
+    const attachment = exportSpreadsheetAsXlsx_(spreadsheet.getId(), spreadsheet.getName());
+
+    MailApp.sendEmail({
+      to: EMAIL_TO,
+      subject: subject,
+      body: lines.concat(['', 'The latest spreadsheet is attached in Excel format.']).join('\n'),
+      attachments: [attachment],
+    });
+
+    return { status: 'Sent with Excel attachment', message: 'Email delivered with XLSX attachment.' };
+  } catch (error) {
+    MailApp.sendEmail({
+      to: EMAIL_TO,
+      subject: subject + ' (attachment fallback)',
+      body: lines.concat(['', 'Excel attachment failed, so this notification was sent without attachment.']).join('\n'),
+    });
+
+    return { status: 'Fallback email sent', message: 'Attachment export failed: ' + error.message };
+  }
 }
 
 function exportSpreadsheetAsXlsx_(spreadsheetId, spreadsheetName) {

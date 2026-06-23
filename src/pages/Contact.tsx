@@ -14,6 +14,7 @@ const Contact = () => {
     name: '',
     phone: '',
     ward: '',
+    email: '',
   });
   const [contactSuccessMessage, setContactSuccessMessage] = useState('');
   const [volunteerSuccessMessage, setVolunteerSuccessMessage] = useState('');
@@ -81,8 +82,8 @@ const Contact = () => {
         }),
       });
 
-      setVolunteerSuccessMessage('Thank you for registering as a supporter! Your response has been recorded and sent to the campaign team.');
-      setVolunteerForm({ name: '', phone: '', ward: '' });
+      setVolunteerSuccessMessage('Thank you for registering as a supporter! Your response has been submitted successfully.');
+      setVolunteerForm({ name: '', phone: '', ward: '', email: '' });
     } catch (error) {
       console.error('Volunteer form submission failed:', error);
       alert('We could not submit your response right now. Please try again.');
@@ -247,7 +248,7 @@ const Contact = () => {
                     />
                   </div>
                 </div>
-                <div className="mb-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
                     <label htmlFor="volunteer-ward" className="block text-sm font-medium text-navy mb-2">
                       Ward *
@@ -270,6 +271,19 @@ const Contact = () => {
                         </optgroup>
                       ))}
                     </select>
+                  </div>
+                  <div>
+                    <label htmlFor="volunteer-email" className="block text-sm font-medium text-navy mb-2">
+                      Email (Optional)
+                    </label>
+                    <input
+                      type="email"
+                      id="volunteer-email"
+                      value={volunteerForm.email}
+                      onChange={(e) => setVolunteerForm({ ...volunteerForm, email: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lp-red"
+                      placeholder="your@email.com"
+                    />
                   </div>
                 </div>
                 <button
