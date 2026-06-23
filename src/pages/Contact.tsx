@@ -176,9 +176,7 @@ const Contact = () => {
                 >
                   {isSubmittingVolunteer ? 'Submitting...' : 'Register as a Supporter'}
                 </button>
-                <p className="mt-3 text-sm text-navy/60">
-                  Once configured, responses are saved to Google Sheets and emailed to `mbarguma@outlook.com`.
-                </p>
+               
               </form>
 
               {/* Campaign Office Info */}
