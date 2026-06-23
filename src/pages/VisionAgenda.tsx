@@ -65,14 +65,14 @@ const VisionAgenda = () => {
               To build a prosperous, united, and developed Hong/Gombi Federal Constituency where every citizen has access to quality education, healthcare, infrastructure, and economic opportunities. We will work tirelessly to attract federal presence to our communities and ensure that our people benefit from Nigeria's democracy.
             </p>
             <div className="inline-block">
-             <a href="/manifesto.pdf"
-  download="Full_Manifesto.pdf"
-  className="bg-gold text-navy px-8 py-3 rounded-md font-semibold hover:bg-opacity-90 transition-colors inline-flex items-center"
-> 
-  <Download size={20} className="mr-2" />
-  Download Full Manifesto (PDF)
-</a>
-              <p className="text-sm text-navy/60 mt-2"></p>
+              <a
+                href="/HON.%20HASSAN_BARGUMA%20MANIFESTO.pdf"
+                download="HON. HASSAN_BARGUMA MANIFESTO.pdf"
+                className="bg-gold text-navy px-8 py-3 rounded-md font-semibold hover:bg-opacity-90 transition-colors inline-flex items-center"
+              >
+                <Download size={20} className="mr-2" />
+                Download Full Manifesto (PDF)
+              </a>
             </div>
           </div>
         </div>
