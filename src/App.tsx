@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Home from "@/pages/Home";
 import About from "@/pages/About";
 import TrackRecord from "@/pages/TrackRecord";
@@ -23,6 +23,7 @@ export default function App() {
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/news" element={<News />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="*" element={<Navigate replace to="/" />} />
           </Routes>
         </main>
         <Footer />
