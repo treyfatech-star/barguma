@@ -91,9 +91,9 @@ const Contact = () => {
 
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-1 gap-12">
+          <div className="grid place-items-center">
             {/* Supporter Sign-Up */}
-            <div className="bg-white p-8 rounded-lg shadow-sm">
+            <div className="w-full max-w-3xl bg-white p-8 rounded-lg shadow-sm">
               <h2 className="font-playfair text-2xl font-bold text-navy mb-6">Register as a Supporter</h2>
               {volunteerSuccessMessage && (
                 <div className="mb-4 rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
